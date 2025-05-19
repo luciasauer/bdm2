@@ -1,0 +1,11 @@
+[project]
+name = "bdm2"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "bson>=0.5.10",
+    "faker>=37.3.0",
+    "pymongo>=4.13.0",
+]
