@@ -1,5 +1,5 @@
-# BDM1 - Assignment 2
-Lab 2 - MongoDB - Document Stores - Bigdata Management
+# BDM2 - Assignment 2
+This project explores core concepts of document-oriented databases using MongoDB, one of the most popular NoSQL systems. It covers how to import data, create and model document structures, and perform queries. The project also includes environment setup and practical exercises to deepen understanding of document store management in the context of big data
 
 ## Content
 
