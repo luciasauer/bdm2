@@ -29,7 +29,7 @@ def run_model(model_class, db, persons, companies):
     model.insert_data(persons, companies)
     
     # Run queries in order
-    for i in [1,2,3,4]:
+    for i in range(1, 5):
         query_func = getattr(model, f"query{i}")
         query_func()
 

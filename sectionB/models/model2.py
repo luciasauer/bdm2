@@ -42,7 +42,7 @@ class Model2:
         Step 3 - Q1: Retrieve each person's full name and their embedded company's name.
         - Uses a simple projection from the `persons` collection.
         """
-        results = self.persons.find({}, {"_id":0, "fullName": 1, "company_name": "$company.name"})
+        results = self.persons.find({}, {"_id":0, "fullName": 1, "CompanyName": "$company.name"})
         # for doc in results:
         #     print(doc)
 
@@ -53,16 +53,15 @@ class Model2:
         - Groups persons by the embedded company name and counts them.
         """
         pipeline = [
-            {
-                "$group": {
-                    "_id": "$company.name",
-                    "numEmployees": {"$sum": 1}
-                }
+            {"$group":
+  	            {"_id":"$company.name",
+                "num_employees":{"$sum":1}}
             },
-            {"$project": {"companyName": "$_id", "numEmployees": 1, "_id": 0}}
+            {"$project": {"_id":0,"CompanyName":"$_id", "numEmployees":"$num_employees"}}
         ]
-        for doc in self.persons.aggregate(pipeline):
-            print(doc)
+        results = self.persons.aggregate(pipeline)
+        # for doc in results:
+        #     print(doc)
 
     @timed_query
     def query3(self):
@@ -71,7 +70,7 @@ class Model2:
         - Applies a conditional update on the `dateOfBirth` field.
         """
         self.persons.update_many(
-            {"dateOfBirth": {"$lt": "1988-01-01"}},
+            {"dateOfBirth": {"$lt": "ISODate('1988-01-01')"}},
             {"$set": {"age": 30}}
         )
 
@@ -83,5 +82,5 @@ class Model2:
         """
         self.persons.update_many(
             {},
-            [{"$set": {"company.name": {"$concat": ["$company.name", " Company"]}}}]
+            [{"$set": {"company.name": {"$concat": ["Company ","$company.name"]}}}]
         )

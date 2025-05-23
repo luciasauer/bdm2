@@ -68,7 +68,7 @@ class Model3:
                 "$project":
                 {
                     "fullName":"$staff.fullName",
-                    "company_name":"$name"
+                    "CompanyName":"$name"
                 }
             }
         ]
@@ -82,25 +82,21 @@ class Model3:
         Step 3 - Q2: Retrieve each company's name and count of employees.
         Employee count is the length of the embedded 'staff' array.
         """
-        for c in self.companies.find({}, {"name": 1, "staff": 1}):
-            print({
-                "companyName": c["name"],
-                "numEmployees": len(c.get("staff", []))
-            })
+        results = self.companies.find({}, {"_id":0, "CompanyName":"$name","numEmployees":{"$size":"$staff"}})
+        # for doc in results:
+        #     print(doc)
 
     @timed_query
     def query3(self):
         """
         Step 3 - Q3: Update the age to 30 for persons born before 1988.
-        As persons are embedded, this requires reading, modifying, and updating the whole document.
+        As persons are embedded in staff, we use an array filter to target the correct documents.
         """
-        all_companies = list(self.companies.find())
-        for c in all_companies:
-            for p in c.get("staff", []):
-                if p["dateOfBirth"] < "1988-01-01":
-                    p["age"] = 30
-            # Update the company's embedded staff array
-            self.companies.update_one({"_id": c["_id"]}, {"$set": {"staff": c["staff"]}})
+        self.companies.update_many(
+            {"staff.dateOfBirth": {"$lt": "ISODate('1988-01-01')"}}, #filter by the companies that have staff with dateOfBirth < 1988
+            {"$set": {"staff.$[person].age": 30}}, #update the age of the employees who meet the condition
+            array_filters=[{"person.dateOfBirth": {"$lt": "ISODate('1988-01-01')"}}] #array filter to update only the staff members who meet the condition
+        )
 
     @timed_query
     def query4(self):
@@ -110,5 +106,5 @@ class Model3:
         """
         self.companies.update_many(
             {},
-            [{"$set": {"name": {"$concat": ["$name", " Company"]}}}]
+            [{"$set": {"name": {"$concat": ["Company ","$name"]}}}]
         )

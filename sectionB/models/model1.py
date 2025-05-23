@@ -77,25 +77,22 @@ class Model1:
         - Then, performs a $lookup to fetch the corresponding company name.
         """
         pipeline = [
-            {
-                "$group": {
-                    "_id": "$companyId",
-                    "numEmployees": {"$sum": 1}
-                }
+            {"$group":
+  	            {"_id":"$companyId",
+                 "num_employees":{"$sum":1}}
             },
-            {
-                "$lookup": {
-                    "from": "companies",
-                    "localField": "_id",
-                    "foreignField": "_id",
-                    "as": "company"
-                }
+            {"$lookup": 
+                {"from":"companies",
+                "localField":"_id",
+                "foreignField":"_id",
+                "as":"company"} 
             },
-            {"$unwind": "$company"},
-            {"$project": {"companyName": "$company.name", "numEmployees": 1}}
+            {"$unwind":"$company"},
+            {"$project":{"_id":0, "CompanyName":"$company.name", "numEmployees":"$num_employees"}}
         ]
-        for doc in self.persons.aggregate(pipeline):
-            print(doc)
+        results = self.persons.aggregate(pipeline)
+        # for doc in results:
+        #     print(doc)
 
     @timed_query
     def query3(self):
@@ -104,7 +101,7 @@ class Model1:
         - Simple update query with a condition on dateOfBirth.
         """
         self.persons.update_many(
-            {"dateOfBirth": {"$lt": "1988-01-01"}},
+            {"dateOfBirth": {"$lt": "ISODate('1988-01-01')"}},
             {"$set": {"age": 30}}
         )
 
@@ -116,5 +113,5 @@ class Model1:
         """
         self.companies.update_many(
             {},
-            [{"$set": {"name": {"$concat": ["$name", " Company"]}}}]
+            [{"$set": {"name": {"$concat": ["Company ","$name"]}}}]
         )
