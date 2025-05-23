@@ -36,7 +36,7 @@ class Model2:
         """
         self.persons.insert_many(persons_data)
 
-    @timed_query
+    @timed_query(repeats=5)
     def query1(self):
         """
         Step 3 - Q1: Retrieve each person's full name and their embedded company's name.
@@ -46,7 +46,7 @@ class Model2:
         # for doc in results:
         #     print(doc)
 
-    @timed_query
+    @timed_query(repeats=5)
     def query2(self):
         """
         Step 3 - Q2: Count the number of employees per company.
@@ -64,7 +64,7 @@ class Model2:
         # for doc in results:
         #     print(doc)
 
-    @timed_query
+    @timed_query(repeats=5)
     def query3(self):
         """
         Step 3 - Q3: Set age = 30 for all persons born before 1988-01-01.
@@ -78,7 +78,7 @@ class Model2:
             {"$set": {"age": 30}}
         )
 
-    @timed_query
+    @timed_query(repeats=5)
     def query4(self):
         """
         Step 3 - Q4: Append the word 'Company' to the name of each embedded company.

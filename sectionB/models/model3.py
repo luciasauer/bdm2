@@ -47,7 +47,7 @@ class Model3:
 
         self.companies.insert_many(company_map.values())
 
-    @timed_query
+    @timed_query(repeats=5)
     def query1(self):
         """
         Step 3 - Q1: Retrieve full name of each person and their company name.
@@ -78,7 +78,7 @@ class Model3:
         # for doc in results:
         #     print(doc)
 
-    @timed_query
+    @timed_query(repeats=5)
     def query2(self):
         """
         Step 3 - Q2: Retrieve each company's name and count of employees.
@@ -88,7 +88,7 @@ class Model3:
         # for doc in results:
         #     print(doc)
 
-    @timed_query
+    @timed_query(repeats=5)
     def query3(self):
         """
         Step 3 - Q3: Update the age to 30 for persons born before 1988.
@@ -103,7 +103,7 @@ class Model3:
             array_filters=[{"person.dateOfBirth": {"$lt": "ISODate('1988-01-01')"}}] #array filter to update only the staff members who meet the condition
         )
 
-    @timed_query
+    @timed_query(repeats=5)
     def query4(self):
         """
         Step 3 - Q4: Append the word 'Company' to each company name.

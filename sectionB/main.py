@@ -37,8 +37,8 @@ def main():
     # MongoDB connection string and DB name
     client = MongoClient("mongodb://localhost:27017/")
 
-    NUM_COMPANIES = 100_000
-    NUM_PERSONS = 5_000_000
+    NUM_COMPANIES = 50_000
+    NUM_PERSONS = 1_000_000
 
     # Generate datasets once
     print("Generating datasets...")
