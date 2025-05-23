@@ -7,7 +7,7 @@ Pipeline Steps Implemented in this File:
 Step 1: Clear previous data from collections (`clear_collections`)
 Step 2: Insert person and company data with reference IDs (`insert_data`)
 Step 3: Run and time the required queries:
-    - Q1: For each person, retrieve their full name and their company’s name using a join
+    - Q1: For each person, retrieve their full name and their company’s name
     - Q2: Count number of employees per company
     - Q3: Set age = 30 for all persons born before 1988
     - Q4: Append the word "Company" to all company names
@@ -50,10 +50,13 @@ class Model1:
     def query1(self):
         """
         Step 3 - Q1: Retrieve each person's full name and their company's name.
-        - Uses a $lookup to join persons with companies on companyId.
+        - 1) Project only the needed attributes (person name and companyId) to improve performance.
+        - 2) Use a $lookup to join persons with companies on companyId.
+        - 3) Unwind (unnest) company fields.
+        - 4) Project only the desired columns.
         """
         pipeline = [
-            {"$project":{"_id":0,"fullName":1, "companyId":1}}, #keep only the needed columns for the lookup from persons
+            {"$project":{"_id":0,"fullName":1, "companyId":1}},
             {
              "$lookup": {
                 "from": "companies", #collection to join with
@@ -62,8 +65,8 @@ class Model1:
                 "as": "company" #rename the array
             }
             },
-            {"$unwind": "$company"}, #unnest the fields from the company
-            {"$project": {"fullName": 1, "companyName": "$company.name"}} #select only the columns to project
+            {"$unwind": "$company"},
+            {"$project": {"fullName": 1, "companyName": "$company.name"}}
         ]
         results = self.persons.aggregate(pipeline)
         # for doc in results:
@@ -73,8 +76,10 @@ class Model1:
     def query2(self):
         """
         Step 3 - Q2: Retrieve each company's name and number of employees.
-        - First, groups persons by companyId and counts them.
-        - Then, performs a $lookup to fetch the corresponding company name.
+        - 1) Group by companyId and count the number of persons.
+        - 2) Lookup with companies collection to get company name.
+        - 3) Unwind company object to unnest fields.
+        - 4) Then, performs a $lookup to fetch the corresponding company name.
         """
         pipeline = [
             {"$group":
@@ -98,7 +103,8 @@ class Model1:
     def query3(self):
         """
         Step 3 - Q3: Set age = 30 for all persons born before 1988-01-01.
-        - Simple update query with a condition on dateOfBirth.
+        - 1) Filter all persons with DOB before 1988.
+        - 2) For those, set age attribute equal to 30.
         """
         self.persons.update_many(
             {"dateOfBirth": {"$lt": "ISODate('1988-01-01')"}},
@@ -109,7 +115,8 @@ class Model1:
     def query4(self):
         """
         Step 3 - Q4: Append the word 'Company' to each company name.
-        - Uses aggregation pipeline syntax in an update.
+        - 1) Select all documents (empty filter).
+        - 2) Set the name equal to the concatenation of Company + original name.
         """
         self.companies.update_many(
             {},

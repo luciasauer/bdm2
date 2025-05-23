@@ -20,10 +20,10 @@
 // Company document
 {
   "_id": "company_id",
-  "name": "EconAI",
+  "name": "Impactum",
   "email": "contact@econai.com",
-  "domain": "econai.com",
-  "url": "http://econai.com",
+  "domain": "impactum.ai",
+  "url": "http://impactum.ai",
   "varNumber": "123456789"
 }
 ```
@@ -42,10 +42,10 @@
   "age": 26,
   "sex": "F",
   "company": {
-    "name": "EconAI",
+    "name": "Impactum",
     "email": "contact@econai.com",
-    "domain": "econai.com",
-    "url": "http://econai.com",
+    "domain": "impactum.ai",
+    "url": "http://impactum.ai",
     "varNumber": "123456789"
   }
 }
@@ -59,10 +59,10 @@
 // Company document with embedded staff
 {
   "_id": "company_id",
-  "name": "EconAI",
+  "name": "Impactum",
   "email": "contact@econai.com",
-  "domain": "econai.com",
-  "url": "http://econai.com",
+  "domain": "impactum.ai",
+  "url": "http://impactum.ai",
   "varNumber": "123456789",
   "staff": [
     {

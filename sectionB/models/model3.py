@@ -51,7 +51,9 @@ class Model3:
     def query1(self):
         """
         Step 3 - Q1: Retrieve full name of each person and their company name.
-        Since persons are embedded, we iterate over companies and extract names from embedded 'staff'.
+        - 1) Project only the company name and the full name of the employees.
+        - 2) Unnest the staff array via unwind operator.
+        - 3) Project the desired columns and rename accordingly.
         """
         pipeline = [
             {
@@ -80,7 +82,7 @@ class Model3:
     def query2(self):
         """
         Step 3 - Q2: Retrieve each company's name and count of employees.
-        Employee count is the length of the embedded 'staff' array.
+        - 1) Find all companyes and get the size of the staff arrays to know the number of employees.
         """
         results = self.companies.find({}, {"_id":0, "CompanyName":"$name","numEmployees":{"$size":"$staff"}})
         # for doc in results:
@@ -91,6 +93,9 @@ class Model3:
         """
         Step 3 - Q3: Update the age to 30 for persons born before 1988.
         As persons are embedded in staff, we use an array filter to target the correct documents.
+        - 1) Filter those companies with at least one staff member born before (less than) 1988.
+        - 2) Set the age to 30 of those that pass the array filter:
+            - Apply an array filter to only update the values of those born before 1988.
         """
         self.companies.update_many(
             {"staff.dateOfBirth": {"$lt": "ISODate('1988-01-01')"}}, #filter by the companies that have staff with dateOfBirth < 1988
@@ -102,7 +107,8 @@ class Model3:
     def query4(self):
         """
         Step 3 - Q4: Append the word 'Company' to each company name.
-        Uses an aggregation pipeline update with `$concat`.
+        - 1) Update many values (all in this case, as the filter is empty), setting
+            the name as Company + original name, with the help of the `$concat` operator.
         """
         self.companies.update_many(
             {},

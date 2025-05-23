@@ -40,7 +40,7 @@ class Model2:
     def query1(self):
         """
         Step 3 - Q1: Retrieve each person's full name and their embedded company's name.
-        - Uses a simple projection from the `persons` collection.
+        - 1) Simply project from `persons` collection, keeping their fullName and CompanyName.
         """
         results = self.persons.find({}, {"_id":0, "fullName": 1, "CompanyName": "$company.name"})
         # for doc in results:
@@ -50,7 +50,8 @@ class Model2:
     def query2(self):
         """
         Step 3 - Q2: Count the number of employees per company.
-        - Groups persons by the embedded company name and counts them.
+        - 1) Group persons by the nested company name and count them.
+        - 2) Project the final columns (renaming)
         """
         pipeline = [
             {"$group":
@@ -67,7 +68,10 @@ class Model2:
     def query3(self):
         """
         Step 3 - Q3: Set age = 30 for all persons born before 1988-01-01.
-        - Applies a conditional update on the `dateOfBirth` field.
+        - Applies a conditional update to many documents on the `dateOfBirth` field by
+        - 1) Filter all persons born before (less than) 1988.
+        - 2) Set age to 30.
+
         """
         self.persons.update_many(
             {"dateOfBirth": {"$lt": "ISODate('1988-01-01')"}},
@@ -78,7 +82,9 @@ class Model2:
     def query4(self):
         """
         Step 3 - Q4: Append the word 'Company' to the name of each embedded company.
-        - Uses aggregation-style update with $concat.
+        - 1) Update many documents (all of them as filter is empty) and set the nested
+            company name to Company + its original value.
+
         """
         self.persons.update_many(
             {},

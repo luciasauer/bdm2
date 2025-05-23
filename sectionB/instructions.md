@@ -1,5 +1,38 @@
 # Section B: Implementation Instructions
 
+1. Before running `main.py`, ensure to have MongoDB service running. 
+2. Located in the root directory of the repository, create a virtual environment by running `uv sync` ([check uv installation](https://docs.astral.sh/uv/getting-started/installation/)).
+3. Activate the virtual environment:
+    ```bash
+    source .venv/bin/activate
+    ```
+3. Execute the `main.py`
+    ```bash
+    $ python main.py
+
+    Generating datasets...
+
+    Running Model1...
+    query1 executed in xxxxxx seconds
+    query2 executed in xxxxxx seconds
+    query3 executed in xxxxxx seconds
+    query4 executed in xxxxxx seconds
+
+    Running Model2...
+    query1 executed in xxxxxx seconds
+    query2 executed in xxxxxx seconds
+    query3 executed in xxxxxx seconds
+    query4 executed in xxxxxx seconds
+
+    Running Model3...
+    query1 executed in xxxxxx seconds
+    query2 executed in xxxxxx seconds
+    query3 executed in xxxxxx seconds
+    query4 executed in xxxxxx seconds
+    ```
+
+The code will execute the steps described in section 1, 2 and 3.
+
 ## 1. 🏗️ Data Generation
 
 We use the [`Faker`](https://faker.readthedocs.io/) Python library to simulate random companies and employees. To ensure a fair comparison across the three data models, the **same dataset** is used consistently throughout all models.
