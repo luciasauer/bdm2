@@ -20,7 +20,8 @@ def generate_persons(n, companies):
     persons = []
     for _ in range(n):
         company = random.choice(companies)
-        dob = fake.date_of_birth(minimum_age=20, maximum_age=60)
+        dob_date = fake.date_of_birth(minimum_age=20, maximum_age=60)
+        dob = datetime.combine(dob_date, datetime.min.time())
         persons.append({
             "firstName": fake.first_name(),
             "fullName": fake.name(),

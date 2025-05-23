@@ -21,8 +21,8 @@ class Model1:
         Constructor: Initializes the model with references to the person and company collections.
         """
         self.db = db
-        self.persons = db.model1_persons
-        self.companies = db.model1_companies
+        self.persons = db.persons
+        self.companies = db.companies
 
     def clear_collections(self):
         """
@@ -31,20 +31,20 @@ class Model1:
         self.persons.drop()
         self.companies.drop()
 
-    def insert_data(self, persons, companies):
+    def insert_data(self, persons_data, companies_data):
         """
         Step 2: Insert data into two separate collections: `companies` and `persons`.
         - First, insert companies and capture their MongoDB-generated `_id`s.
         - Then, for each person, replace the `company` field with a `companyId` reference.
         """
-        company_ids = self.companies.insert_many(companies).inserted_ids
-        id_map = {c['name']: _id for c, _id in zip(companies, company_ids)}
+        company_ids = self.companies.insert_many(companies_data).inserted_ids
+        id_map = {c['name']: _id for c, _id in zip(companies_data, company_ids)}
 
-        for p in persons:
+        for p in persons_data:
             p['companyId'] = id_map[p['company']['name']]
             del p['company']  # Remove redundant embedded company info
 
-        self.persons.insert_many(persons)
+        self.persons.insert_many(persons_data)
 
     @timed_query
     def query1(self):
@@ -53,19 +53,21 @@ class Model1:
         - Uses a $lookup to join persons with companies on companyId.
         """
         pipeline = [
+            {"$project":{"_id":0,"fullName":1, "companyId":1}}, #keep only the needed columns for the lookup from persons
             {
-                "$lookup": {
-                    "from": "model1_companies",
-                    "localField": "companyId",
-                    "foreignField": "_id",
-                    "as": "company"
-                }
+             "$lookup": {
+                "from": "companies", #collection to join with
+                "localField": "companyId", #companyId in persons
+                "foreignField": "_id", #_id in companies
+                "as": "company" #rename the array
+            }
             },
-            {"$unwind": "$company"},
-            {"$project": {"fullName": 1, "companyName": "$company.name"}}
+            {"$unwind": "$company"}, #unnest the fields from the company
+            {"$project": {"fullName": 1, "companyName": "$company.name"}} #select only the columns to project
         ]
-        for doc in self.persons.aggregate(pipeline):
-            print(doc)
+        results = self.persons.aggregate(pipeline)
+        # for doc in results:
+        #     print(doc)
 
     @timed_query
     def query2(self):
@@ -83,7 +85,7 @@ class Model1:
             },
             {
                 "$lookup": {
-                    "from": "model1_companies",
+                    "from": "companies",
                     "localField": "_id",
                     "foreignField": "_id",
                     "as": "company"

@@ -20,7 +20,7 @@ class Model3:
         Constructor: Initializes the model using a MongoDB database reference.
         """
         self.db = db
-        self.companies = db.model3_companies  # Collection to store companies with embedded staff
+        self.companies = db.companies  # Collection to store companies with embedded staff
 
     def clear_collections(self):
         """
@@ -53,10 +53,28 @@ class Model3:
         Step 3 - Q1: Retrieve full name of each person and their company name.
         Since persons are embedded, we iterate over companies and extract names from embedded 'staff'.
         """
-        companies = self.companies.find({}, {"name": 1, "staff.fullName": 1})
-        for c in companies:
-            for p in c.get("staff", []):
-                print({"fullName": p['fullName'], "companyName": c['name']})
+        pipeline = [
+            {
+                "$project":{
+                    "_id":0,
+                    "name":1,
+                    "staff.fullName":1
+                }
+            },
+            {
+                "$unwind": "$staff"
+            },
+            {
+                "$project":
+                {
+                    "fullName":"$staff.fullName",
+                    "company_name":"$name"
+                }
+            }
+        ]
+        results = self.companies.aggregate(pipeline)
+        # for doc in results:
+        #     print(doc)
 
     @timed_query
     def query2(self):

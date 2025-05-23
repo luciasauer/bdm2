@@ -21,7 +21,7 @@ class Model2:
         Constructor: Initializes the model with a reference to the persons collection.
         """
         self.db = db
-        self.persons = db.model2_persons
+        self.persons = db.persons
 
     def clear_collections(self):
         """
@@ -29,20 +29,12 @@ class Model2:
         """
         self.persons.drop()
 
-    def insert_data(self, persons, companies):
+    def insert_data(self, persons_data, companies_data):
         """
         Step 2: Insert data into the persons collection, embedding company info inside each person.
         - For each person, the `company` field is added as a nested document.
         """
-        for p in persons:
-            p['company'] = {
-                "name": p['company']['name'],
-                "email": p['company']['email'],
-                "domain": p['company']['domain'],
-                "url": p['company']['url'],
-                "varNumber": p['company']['varNumber']
-            }
-        self.persons.insert_many(persons)
+        self.persons.insert_many(persons_data)
 
     @timed_query
     def query1(self):
@@ -50,8 +42,9 @@ class Model2:
         Step 3 - Q1: Retrieve each person's full name and their embedded company's name.
         - Uses a simple projection from the `persons` collection.
         """
-        for doc in self.persons.find({}, {"fullName": 1, "company.name": 1}):
-            print(doc)
+        results = self.persons.find({}, {"_id":0, "fullName": 1, "company_name": "$company.name"})
+        # for doc in results:
+        #     print(doc)
 
     @timed_query
     def query2(self):

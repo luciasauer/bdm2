@@ -7,5 +7,7 @@ requires-python = ">=3.11"
 dependencies = [
     "bson>=0.5.10",
     "faker>=37.3.0",
+    "ipykernel>=6.29.5",
+    "pykernel>=0.1.6",
     "pymongo>=4.13.0",
 ]
