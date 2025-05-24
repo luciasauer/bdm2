@@ -1,6 +1,13 @@
-# 📦 BDM2 - Assignment 2
+# 🚀 BDM2 – Document Modeling with MongoDB
+
+![MongoDB](https://img.shields.io/badge/MongoDB-NoSQL-brightgreen?logo=mongodb)
+![Status](https://img.shields.io/badge/Project%20Type-Academic-blue)
+![Language](https://img.shields.io/badge/Python-3.10+-yellow?logo=python)
 
 This project explores core concepts of document-oriented databases using **MongoDB**, one of the most widely adopted NoSQL systems. It demonstrates how to design and model document structures, import and manipulate data, and execute queries efficiently. The project also walks through setting up the environment and provides hands-on exercises that reinforce key principles of document store management, particularly in the context of Big Data.
+
+> 👩🏻‍💻🧑‍💻 *Project by Lucia Sauer & Julian Romero*  
+> 🎓 *Master in Data Science – Barcelona School of Economics*
 
 ---
 
