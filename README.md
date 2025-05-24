@@ -1,4 +1,5 @@
-# 🚀 BDM2 – Document Modeling with MongoDB
+# 🚀 BDM2 - NoSQL Database Design with MongoDB
+
 
 ![MongoDB](https://img.shields.io/badge/MongoDB-NoSQL-brightgreen?logo=mongodb)
 ![Status](https://img.shields.io/badge/Project%20Type-Academic-blue)
