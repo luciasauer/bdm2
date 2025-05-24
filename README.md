@@ -15,3 +15,6 @@ The remaining files are setup-scripts for uv in order to provide a reproducible 
 
 ## Key Findings
 ----
+
+## Setup & Requirements
+----
