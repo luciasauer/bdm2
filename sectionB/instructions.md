@@ -82,8 +82,8 @@ project/
 
 ## 5. Summary of Model Trade-Offs
 
-| Model       | Characteristics                      | Pros                                    | Cons                                        |
-| ----------- | ------------------------------------ | --------------------------------------- | ------------------------------------------- |
-| **Model 1** | Separate collections with references | Flexible updates, normalized structure  | Requires joins/aggregation for related data |
-| **Model 2** | Company embedded in each person      | Faster reads for person-centric queries | Redundant company data across persons       |
-| **Model 3** | Persons embedded in each company     | Efficient company-centric queries       | Difficult to update individual person info  |
+| Model        | Characteristics                      | Pros                                    | Cons                                        |
+| -----------  | ------------------------------------ | --------------------------------------- | ------------------------------------------- |
+| **M1**  | Separate collections with references | Flexible updates, normalized structure  | Requires joins/aggregation for related data |
+| **M2**  | Company embedded in each person      | Faster reads for person-centric queries | Redundant company data across persons       |
+| **M3**  | Persons embedded in each company     | Efficient company-centric queries       | Difficult to update individual person info  |
