@@ -14,6 +14,7 @@ Step 3: Run and time the required queries:
 """
 
 from utils import timed_query
+from datetime import datetime
 
 class Model1:
     def __init__(self, db):
@@ -68,9 +69,8 @@ class Model1:
             {"$unwind": "$company"},
             {"$project": {"fullName": 1, "companyName": "$company.name"}}
         ]
-        results = self.persons.aggregate(pipeline)
-        # for doc in results:
-        #     print(doc)
+        results = list(self.persons.aggregate(pipeline))
+        print(f'Number of results collected: {len(results)}')
 
     @timed_query(repeats=5)
     def query2(self):
@@ -95,21 +95,23 @@ class Model1:
             {"$unwind":"$company"},
             {"$project":{"_id":0, "CompanyName":"$company.name", "numEmployees":"$num_employees"}}
         ]
-        results = self.persons.aggregate(pipeline)
-        # for doc in results:
-        #     print(doc)
+        results = list(self.persons.aggregate(pipeline))
+        print(f'Number of results collected: {len(results)}')
 
-    @timed_query(repeats=5)
+    @timed_query(repeats=1)
     def query3(self):
         """
         Step 3 - Q3: Set age = 30 for all persons born before 1988-01-01.
         - 1) Filter all persons with DOB before 1988.
         - 2) For those, set age attribute equal to 30.
         """
-        self.persons.update_many(
-            {"dateOfBirth": {"$lt": "ISODate('1988-01-01')"}},
+        result = self.persons.update_many(
+            {"dateOfBirth": {"$lt": datetime(1988,1, 1)}},
             {"$set": {"age": 30}}
         )
+        print(f"Documents matched: {result.matched_count}")
+        print(f"Documents modified: {result.modified_count}")
+
 
     @timed_query(repeats=5)
     def query4(self):
@@ -118,7 +120,9 @@ class Model1:
         - 1) Select all documents (empty filter).
         - 2) Set the name equal to the concatenation of Company + original name.
         """
-        self.companies.update_many(
+        result = self.companies.update_many(
             {},
             [{"$set": {"name": {"$concat": ["Company ","$name"]}}}]
         )
+        print(f"Documents matched: {result.matched_count}")
+        print(f"Documents modified: {result.modified_count}")

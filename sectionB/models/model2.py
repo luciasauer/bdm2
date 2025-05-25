@@ -14,6 +14,7 @@ Step 3: Run and time the required queries:
 """
 
 from utils import timed_query
+from datetime import datetime
 
 class Model2:
     def __init__(self, db):
@@ -42,7 +43,8 @@ class Model2:
         Step 3 - Q1: Retrieve each person's full name and their embedded company's name.
         - 1) Simply project from `persons` collection, keeping their fullName and CompanyName.
         """
-        results = self.persons.find({}, {"_id":0, "fullName": 1, "CompanyName": "$company.name"})
+        results = list(self.persons.find({}, {"_id":0, "fullName": 1, "CompanyName": "$company.name"}))
+        print(f'Number of results collected: {len(results)}')
         # for doc in results:
         #     print(doc)
 
@@ -60,11 +62,10 @@ class Model2:
             },
             {"$project": {"_id":0,"CompanyName":"$_id", "numEmployees":"$num_employees"}}
         ]
-        results = self.persons.aggregate(pipeline)
-        # for doc in results:
-        #     print(doc)
+        results = list(self.persons.aggregate(pipeline))
+        print(f'Number of results collected: {len(results)}')
 
-    @timed_query(repeats=5)
+    @timed_query(repeats=1)
     def query3(self):
         """
         Step 3 - Q3: Set age = 30 for all persons born before 1988-01-01.
@@ -73,10 +74,13 @@ class Model2:
         - 2) Set age to 30.
 
         """
-        self.persons.update_many(
-            {"dateOfBirth": {"$lt": "ISODate('1988-01-01')"}},
+        result = self.persons.update_many(
+            {"dateOfBirth": {"$lt": datetime(1988,1, 1)}},
             {"$set": {"age": 30}}
         )
+        print(f"Documents matched: {result.matched_count}")
+        print(f"Documents modified: {result.modified_count}")
+
 
     @timed_query(repeats=5)
     def query4(self):
@@ -86,7 +90,9 @@ class Model2:
             company name to Company + its original value.
 
         """
-        self.persons.update_many(
+        result = self.persons.update_many(
             {},
             [{"$set": {"company.name": {"$concat": ["Company ","$company.name"]}}}]
         )
+        print(f"Documents matched: {result.matched_count}")
+        print(f"Documents modified: {result.modified_count}")

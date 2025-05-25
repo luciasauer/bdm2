@@ -13,6 +13,7 @@ Step 3: Run and time the required queries:
 """
 
 from utils import timed_query
+from datetime import datetime
 
 class Model3:
     def __init__(self, db):
@@ -74,9 +75,8 @@ class Model3:
                 }
             }
         ]
-        results = self.companies.aggregate(pipeline)
-        # for doc in results:
-        #     print(doc)
+        results = list(self.companies.aggregate(pipeline))
+        print(f'Number of results collected: {len(results)}')
 
     @timed_query(repeats=5)
     def query2(self):
@@ -84,11 +84,10 @@ class Model3:
         Step 3 - Q2: Retrieve each company's name and count of employees.
         - 1) Find all companyes and get the size of the staff arrays to know the number of employees.
         """
-        results = self.companies.find({}, {"_id":0, "CompanyName":"$name","numEmployees":{"$size":"$staff"}})
-        # for doc in results:
-        #     print(doc)
+        results = list(self.companies.find({}, {"_id":0, "CompanyName":"$name","numEmployees":{"$size":"$staff"}}))
+        print(f'Number of results collected: {len(results)}')
 
-    @timed_query(repeats=5)
+    @timed_query(repeats=1)
     def query3(self):
         """
         Step 3 - Q3: Update the age to 30 for persons born before 1988.
@@ -97,11 +96,14 @@ class Model3:
         - 2) Set the age to 30 of those that pass the array filter:
             - Apply an array filter to only update the values of those born before 1988.
         """
-        self.companies.update_many(
-            {"staff.dateOfBirth": {"$lt": "ISODate('1988-01-01')"}}, #filter by the companies that have staff with dateOfBirth < 1988
+        result = self.companies.update_many(
+            {"staff.dateOfBirth": {"$lt": datetime(1988,1, 1)}}, #filter by the companies that have staff with dateOfBirth < 1988
             {"$set": {"staff.$[person].age": 30}}, #update the age of the employees who meet the condition
             array_filters=[{"person.dateOfBirth": {"$lt": "ISODate('1988-01-01')"}}] #array filter to update only the staff members who meet the condition
         )
+        print(f"Documents matched: {result.matched_count}")
+        print(f"Documents modified: {result.modified_count}")
+
 
     @timed_query(repeats=5)
     def query4(self):
@@ -110,7 +112,10 @@ class Model3:
         - 1) Update many values (all in this case, as the filter is empty), setting
             the name as Company + original name, with the help of the `$concat` operator.
         """
-        self.companies.update_many(
+        result = self.companies.update_many(
             {},
             [{"$set": {"name": {"$concat": ["Company ","$name"]}}}]
         )
+        print(f"Documents matched: {result.matched_count}")
+        print(f"Documents modified: {result.modified_count}")
+
