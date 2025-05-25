@@ -13,22 +13,50 @@
     Generating datasets...
 
     Running Model1...
-    query1 executed in xxxxxx seconds
-    query2 executed in xxxxxx seconds
-    query3 executed in xxxxxx seconds
-    query4 executed in xxxxxx seconds
+    Number of results collected: 1000000
+    Run 1/5: 9.2089 seconds
+    Number of results collected: 1000000
+    Run 2/5: 8.9989 seconds
+    Number of results collected: 1000000
+    Run 3/5: 9.1434 seconds
+    Number of results collected: 1000000
+    Run 4/5: 9.0844 seconds
+    Number of results collected: 1000000
+    Run 5/5: 8.9850 seconds
+    Average execution time for query1 over 5 runs: 9.0841 seconds
+    Number of results collected: 37009
+    Run 1/5: 0.5590 seconds
+    Number of results collected: 37009
+    Run 2/5: 0.5391 seconds
+    Number of results collected: 37009
+    Run 3/5: 0.5393 seconds
+    Number of results collected: 37009
+    Run 4/5: 0.5703 seconds
+    Number of results collected: 37009
+    Run 5/5: 0.5438 seconds
+    Average execution time for query2 over 5 runs: 0.5503 seconds
+    Documents matched: 575787
+    Documents modified: 575787
+    Run 1/1: 1.7027 seconds
+    Average execution time for query3 over 1 runs: 1.7027 seconds
+    Documents matched: 50000
+    Documents modified: 50000
+    Run 1/5: 0.1924 seconds
+    Documents matched: 50000
+    Documents modified: 50000
+    Run 2/5: 0.2102 seconds
+    Documents matched: 50000
+    Documents modified: 50000
+    Run 3/5: 0.2182 seconds
+    Documents matched: 50000
+    Documents modified: 50000
+    Run 4/5: 0.3509 seconds
+    Documents matched: 50000
+    Documents modified: 50000
+    Run 5/5: 0.4803 seconds
+    Average execution time for query4 over 5 runs: 0.2904 seconds
 
     Running Model2...
-    query1 executed in xxxxxx seconds
-    query2 executed in xxxxxx seconds
-    query3 executed in xxxxxx seconds
-    query4 executed in xxxxxx seconds
-
-    Running Model3...
-    query1 executed in xxxxxx seconds
-    query2 executed in xxxxxx seconds
-    query3 executed in xxxxxx seconds
-    query4 executed in xxxxxx seconds
     ```
 
 The code will execute the steps described in section 1, 2 and 3.
