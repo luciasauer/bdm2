@@ -99,7 +99,7 @@ class Model3:
         result = self.companies.update_many(
             {"staff.dateOfBirth": {"$lt": datetime(1988,1, 1)}}, #filter by the companies that have staff with dateOfBirth < 1988
             {"$set": {"staff.$[person].age": 30}}, #update the age of the employees who meet the condition
-            array_filters=[{"person.dateOfBirth": {"$lt": "ISODate('1988-01-01')"}}] #array filter to update only the staff members who meet the condition
+            array_filters=[{"person.dateOfBirth": {"$lt": datetime(1988,1,1)}}] #array filter to update only the staff members who meet the condition
         )
         print(f"Documents matched: {result.matched_count}")
         print(f"Documents modified: {result.modified_count}")
